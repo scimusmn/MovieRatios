@@ -4,7 +4,7 @@
 	var loopSpeed = 5;
 	var width = 320;
 	var height = 240;
-	
+
 	var track = new pointTracker();
 	var trace = new pointTrace();
 	var grabBG =false;
@@ -15,11 +15,11 @@
         cam = document.getElementById('cam');
 		canvas = document.getElementById("main");
 		ctx = canvas.getContext("2d");
-		
+
 		canvas.addEventListener('mousemove', function(evt) {
 			mousePos = getMousePos(canvas, evt);
 		}, false);
-		
+
 		setTimeout(app.grabBackground,5000);
     };
 
@@ -58,9 +58,9 @@
 		cam.src = "";
 		e.preventDefault();
     };
-	
+
 	var mousePos = {x:0,y:0};
-	
+
 	function getMousePos(canvas, evt) {
         var rect = canvas.getBoundingClientRect();
         return {
@@ -68,7 +68,7 @@
           y: evt.clientY - rect.top
         };
       }
-    
+
     app.loop = function () {
 		var r, g, b, gray;
 		var character, line = "";
@@ -82,15 +82,15 @@
         ctx.scale(-1, 1);
 		ctx.drawImage(cam, 0, 0, width, height);
 		ctx.restore();
-        
+
 		ctx.fillStyle="#fff";								//Need this dot at the top,
         ctx.fillRect(width/2,0,1,1);					//else, the groups don't record, I guess.
-        
+
 		//accessing pixel data
 		var pixels = ctx.getImageData(0, 0, width, height);		//
 		var colordata = pixels.data;
-		
-		
+
+
 
 		for(var i = 0; i < colordata.length; i +=4){			//threshold the image
 			r = colordata[i];
@@ -98,43 +98,43 @@
 			b = colordata[i+2];
 			//converting the pixel into grayscale
 			gray = (r+g+b)/3//r*0.2126 + g*0.7152 + b*0.0722;
-			
+
 			if(gray<200) gray = 0;								//below 200 is black
 			else gray = 255;
-			
+
 			colordata[i] = colordata[i+1] = colordata[i+2] = gray;
 		}
-		
+
 		ctx.clearRect (0, 0, canvas.width, canvas.height);
-		
-		
+
+
 		var pxlGrps = new pixelGroups();
 		pxlGrps.makeGroups(pixels);
-		
+
 		ctx.putImageData(pixels,0,0);
-		
+
 		if(grabBG) track.acquireBG(pxlGrps.groups),grabBG=false,console.log("hello");
-		
-		
-		
+
+
+
 		track.findPoint(pxlGrps.groups);
-		
+
 		if(track.point!==null){
 			trace.addPoint({x:track.point.x/width,y:(track.point.y-40)/(height-60)});
 		}
 		else trace.jump();
-		
-		
+
+
 		trace.draw(0,0);
-		
-		
+
+
     };
-    
+
     app.grabBackground = function(){
     	grabBG=true;
 	console.log("easy bg grab ");
     }
-	
+
 	document.onkeydown = function(e) {
 		switch (e.which) {
 			// key code for left arrow
@@ -155,7 +155,7 @@
 				break;
 		}
 	}
-    
+
     app.init();
     app.startCam();
 
