@@ -1,4 +1,5 @@
 include(['src/camera.js','src/smmCanvas.js','src/playback.js','src/bgCanvas.js','src/frameCanvas.js','src/overlayDiv.js'], function() {
+	function app() {};
 
 	var live = new smmCanvas($('#live'));				//create the live feed canvas object
 	var last = new smmCanvas($('#lastFrame'));			//create the canvas object to display the previous frame
