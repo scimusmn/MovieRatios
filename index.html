@@ -4,45 +4,46 @@
 	<meta charset="utf-8">
 	<title>Movie Ratios</title>
 	<link rel="stylesheet" href="style.css" />
-	<script src="src/smmInclude.js" main="src/app.js"></script>
+	<script src="src/muse/include.js" main="src/app.js"></script>
 </head>
 <body>
-	<canvas id="bgImg" width="640" height="480"></canvas>
+	<video is="web-cam" id="cam"></video>
+	<canvas is="can-vas" id="bgImg" width="640" height="480"></canvas>
 	<div id="titleBar">Movie Ratios</div>
 	<div id="captureCont">
 		<div class="last imgCont">
-			<canvas id="lastFrame" width="640" height="480"> </canvas>
+			<canvas is="can-vas" id="lastFrame" width="640" height="480"> </canvas>
 			<p class="blueText">Last image</p>
 			<p class="redText">Imagen anterior</p>
 		</div>
 		<div class="live imgCont">
-			<canvas id="live" width="640" height="480"> </canvas>
+			<canvas is="can-vas" id="live" width="640" height="480"> </canvas>
 			<p class="blueText">Current view</p>
 			<p class="redText">Vista actual</p>
 		</div>
 	</div>
 	<div id="playbackCont" style="display:none">
-		<canvas id="plyBk" width="640" height="480"> </canvas>
+		<canvas is="can-vas" id="plyBk" width="640" height="480"> </canvas>
 		<div class="stretch"></div>
 	</div>
 	<div id="numFrames" class="infoDiv redText autoCenter">0 total frames</div>
-	<canvas id="strip" class="autoCenter"></canvas>
+	<canvas is="can-vas" id="strip" class="autoCenter"></canvas>
 	<div id="fpsCont" class="infoDiv autoCenter">
 			<p class="blueText">Playback rate: <span id="fps" class="redText">2 frames per second</span></p>
 	</div>
 
-	<div id="delOverlay" class="overlay">
+	<over-lay id="delLay">
 		<div class="overlayBox">
 			<p class="blueText">Are you sure you want to delete this movie?</p>
 			<p class="redText">Press 'RESET' again to confirm</p>
 			<p class="redText">Press any other button to cancel</p>
 		</div>
-	</div>
-	<div id="playOverlay" class="overlay">
+	</over-lay>
+	<over-lay id="playLay">
 		<div class="overlayBox">
 			<p class="blueText">Press 'PLAY' again to replay</p>
 			<p class="redText">Press any other button to return to the capture screen</p>
 		</div>
-	</div>
+	</over-lay>
 </body>
 </html>

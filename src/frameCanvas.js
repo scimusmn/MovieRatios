@@ -1,40 +1,41 @@
 var frameStrip = function(){
 	var self = this;
-	var strip = new smmCanvas($("strip"));							//declare the frame strip canvas
-	var temp = new smmCanvas(document.createElement("canvas"));		//create a temporary canvas to draw image data to.
-	
+	var strip = µ("#strip");							//declare the frame strip canvas
+	var temp = document.createElement('canvas','can-vas');		//create a temporary canvas to draw image data to.
+
+
 	//declare variables to store dimensions.
 	var wid = 0;
 	var hgt = 0;
 	var pb = null;			//the playback object
 	var ctx = strip.ctx;	//the strip context
-	
+
 	//slide is the offset position of the drawing frames; this is used to
 	//create the sliding on or off effect when a frame is added or removed.
-	var slide =0;		
+	var slide =0;
 	var slideInc =0;
-	
+
 	//resizes the strip canvas and the temporary (not displayed) canvas.
 	this.resize = function(w,h,imgW,imgH){
 		wid=w;
 		hgt=h;
 		strip.resize(w,h);
-		
+
 		//temp must be sized to the captured frame size, since we are writing imageData to this canvas
-		temp.resize(imgW,imgH);		
+		temp.resize(imgW,imgH);
 	}
-	
+
 	//bind the playback function to the strip canvas, so we can access pb.fps and pb.book.frame
 	this.registerPB = function(plyBk){
 		pb=plyBk;
 	}
-	
+
 	//function used to draw the strip on screen. Only called on resize, frame capturing or deleting, and changing fps
 	this.draw = function(){
 		strip.clear();					//clear the canvas
-		
+
 		//draw a black rectangle over the whole canvas
-		ctx.beginPath();			
+		ctx.beginPath();
 		ctx.rect(0,0,wid,hgt);
 		ctx.fillStyle="#000000";
 		ctx.fill();
@@ -43,14 +44,14 @@ var frameStrip = function(){
 			for(var i=0; i<pb.fps+1; i++){ 				//for each frame per second of playback rate
 				var tWid = wid/pb.fps;					//define the width of a cell
 				var tX = wid-(i+1)*wid/pb.fps+slide;	// and its starting position
-				
+
 				//if there are at least i frames in the "book" object...
 				if(i<pb.book.length()){
 					//write the frame data to the temporary canvas
 					temp.ctx.putImageData(pb.book.frame((pb.book.length()-1)-i),0,0);
 					//and use that canvas to draw the rescaled image into the frame cell.
-					ctx.drawImage(temp.elem,tX+5,5,tWid-10,hgt-10);
-					
+					ctx.drawImage(temp,tX+5,5,tWid-10,hgt-10);
+
 					//we do this because images cannot be scaled when using putImageData
 				}
 				else { //if there are more cells than frames in "book"
@@ -85,15 +86,15 @@ var frameStrip = function(){
 			setTimeout(self.draw.bind(self),20);	//and set draw to be called again in 20 milliseconds
 		}
 		else slide = 0; 		//if slide is less than 4, set slide to zero. This needs to be done because after incrementing by slideInc,
-		//slide won't necessarily reach zero; it could be up to 4 off. 
+		//slide won't necessarily reach zero; it could be up to 4 off.
 	}
-	
+
 	this.newFrame = function(){
 		slide = Math.floor(wid/pb.fps);					//set the value of slide to exactly the width of one cell in the frame strip
 		slideInc=-(Math.floor((wid/pb.fps)/5));			//set the increment to -1/5th the initial value of slide.
 		this.draw();									//start drawing the sliding frames.
 	}
-	
+
 	this.popFrame = function(){
 		slide = -Math.floor(wid/pb.fps);				//set the value of slide to exactly the negative width of one cell in the frame strip
 		slideInc=(Math.floor((wid/pb.fps)/5));			//set the increment to 1/5th the initial value of slide.
