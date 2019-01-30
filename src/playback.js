@@ -1,12 +1,13 @@
-include(['src/flipBookPixels.js'], function() {
-  function playback(bk) {
+obtain(['µ/canvas.js', './src/flipBookPixels.js'], function(cnv, fbp) {
+  exports.flipbook = fbp.flipbook;
+  exports.playback = function(bk) {
     this.fps = parseInt(µ('#fps').textContent);  //Grab the initial value for fps from the index.html
     var _this = this;
     var pbCnvs = µ('#plyBk');          //grab the canvas element to be used for playback
-    var ctx = pbCnvs.getContext('2d');      //get the 2d context from the pb canvas
+    var ctx = pbCnvs.ctx;      //get the 2d context from the pb canvas
 
-    var dCnvs = document.createElement('canvas');  //make a dummy canvas for resizing images for playback
-    var dCtx = dCnvs.getContext('2d');        //get the context of the dummy canvas
+    var dCnvs = document.createElement('canvas', { is: 'can-vas' });  //make a dummy canvas for resizing images for playback
+    var dCtx = dCnvs.ctx;        //get the context of the dummy canvas
 
     this.book = bk;        //bind 'book' to the flipbook object which was passed in the constructor
     var timer = null;      //create the variable to store the setInterval for drawing new frames to screen
@@ -97,5 +98,5 @@ include(['src/flipBookPixels.js'], function() {
     };
   };
 
-  window.playback = playback;
+  provide(exports);
 });
